@@ -259,7 +259,7 @@ async def account_login(bot: Client, m: Message):
 
 
 bot.run()
-            if name == "main":
+            if __name__ == "__main__":
     # Start Flask server in a background thread <-- Add this
                 Thread(target=lambda: web_app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))).start()
     
