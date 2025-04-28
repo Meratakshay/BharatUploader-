@@ -251,3 +251,7 @@ async def account_login(bot: Client, m: Message):
 
 
 bot.run()
+            if name == "main":
+                port = int(os.environ.get("PORT", 8000))
+                app.run(host="0.0.0.0", port=port)  # Critical for Koyeb
+
