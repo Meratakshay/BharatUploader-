@@ -1,5 +1,6 @@
 from pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid
 import requests
+from flask import Flask
 import json
 import subprocess
 from pyrogram import Client, filters
@@ -21,6 +22,13 @@ from config import api_id, api_hash, bot_token, auth_users, sudo_users
 import sys
 import re
 import os
+from threading import Thread
+
+web_app = Flask(__name__)
+
+@web_app.route("/")
+def health_check():
+    return "OK", 200
 
 bot = Client(
     "bot",
@@ -252,6 +260,9 @@ async def account_login(bot: Client, m: Message):
 
 bot.run()
             if name == "main":
-                port = int(os.environ.get("PORT", 8000))
-                app.run(host="0.0.0.0", port=port)  # Critical for Koyeb
-
+    # Start Flask server in a background thread <-- Add this
+                Thread(target=lambda: web_app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))).start()
+    
+    # Start the Pyrogram bot (keep your existing code below)
+                print("Bot Started...")
+                app.run()
